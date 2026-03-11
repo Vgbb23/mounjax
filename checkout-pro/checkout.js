@@ -20,6 +20,11 @@ const PIX_CODE = "00020126580014BR.GOV.BCB.PIX0136123e4567-e89b-12d3-a456-426614
 const formStep = document.getElementById('form-step');
 const paymentStep = document.getElementById('payment-step');
 const checkoutForm = document.getElementById('checkout-form');
+const nameInput = document.getElementById('name');
+const emailInput = document.getElementById('email');
+const phoneInput = document.getElementById('phone');
+const cpfInput = document.getElementById('cpf');
+const cepInput = document.getElementById('cep');
 const addressFields = document.getElementById('address-fields');
 const loadingCep = document.getElementById('loading-cep');
 const summarySubtotal = document.getElementById('summary-subtotal');
@@ -277,10 +282,10 @@ async function createFruitfyPixCharge() {
       Accept: 'application/json',
     },
     body: JSON.stringify({
-      name: checkoutForm.name.value.trim(),
-      email: checkoutForm.email.value.trim(),
-      phone: checkoutForm.phone.value,
-      cpf: checkoutForm.cpf.value.replace(/\D/g, ''),
+      name: nameInput.value.trim(),
+      email: emailInput.value.trim(),
+      phone: phoneInput.value,
+      cpf: cpfInput.value.replace(/\D/g, ''),
       amount: ticketValue,
       utm: getUtmPayload()
     })
@@ -310,11 +315,11 @@ async function createFruitfyPixCharge() {
   if (qrCode) paymentQrImage.src = qrCode;
 }
 
-checkoutForm.cep.addEventListener('input', handleCEP);
-checkoutForm.phone.addEventListener('input', function (e) {
+cepInput.addEventListener('input', handleCEP);
+phoneInput.addEventListener('input', function (e) {
   e.target.value = formatPhone(e.target.value);
 });
-checkoutForm.cpf.addEventListener('input', function (e) {
+cpfInput.addEventListener('input', function (e) {
   e.target.value = formatCPF(e.target.value);
   if (e.target.value.replace(/\D/g, '').length === 11) {
     if (!validateCPF(e.target.value)) {
@@ -344,31 +349,31 @@ checkoutForm.addEventListener('submit', function(e) {
   e.preventDefault();
   let valid = true;
   // Validar campos
-  if (checkoutForm.name.value.trim().length < 3) {
+  if (nameInput.value.trim().length < 3) {
     showError('name', 'Nome completo é obrigatório');
     valid = false;
   } else {
     hideError('name');
   }
-  if (!validateEmail(checkoutForm.email.value)) {
+  if (!validateEmail(emailInput.value)) {
     showError('email', 'E-mail inválido');
     valid = false;
   } else {
     hideError('email');
   }
-  if (!validatePhone(checkoutForm.phone.value)) {
+  if (!validatePhone(phoneInput.value)) {
     showError('phone', 'Telefone inválido');
     valid = false;
   } else {
     hideError('phone');
   }
-  if (!validateCPF(checkoutForm.cpf.value)) {
+  if (!validateCPF(cpfInput.value)) {
     showError('cpf', 'CPF inválido');
     valid = false;
   } else {
     hideError('cpf');
   }
-  if (!validateCEP(checkoutForm.cep.value) || !isCepVerified) {
+  if (!validateCEP(cepInput.value) || !isCepVerified) {
     showError('cep', 'CEP inválido');
     valid = false;
   } else {
