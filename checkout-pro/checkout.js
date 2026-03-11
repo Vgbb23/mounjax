@@ -14,10 +14,7 @@ const SAVINGS_BY_PACK_UNITS = {
   8: 523.70
 };
 const SHIPPING_SEDEX = 21.53;
-const FRUITFY_API_URL = 'https://api.fruitfy.io/api/pix/charge';
-const FRUITFY_TOKEN = 'SEU_TOKEN_FRUITFY';
-const FRUITFY_STORE_ID = '9f4fab76-fe9d-4945-9283-c7bde641fc0e';
-const FRUITFY_PRODUCT_ID = 'a0e4d86d-a036-4f87-8c3f-b6d9c6abffd3';
+const PIX_API_PROXY_URL = '/api/pix/charge';
 const PIX_CODE = "00020126580014BR.GOV.BCB.PIX0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5913NOME RECEBEDOR6008BRASILIA62070503***63041D3D";
 
 const formStep = document.getElementById('form-step');
@@ -97,12 +94,6 @@ function getUtmPayload() {
     if (value) utm[key] = value;
   });
   return utm;
-}
-
-function normalizePhone(phoneValue) {
-  const digits = phoneValue.replace(/\D/g, '');
-  if (!digits) return '';
-  return digits.startsWith('55') ? digits : `55${digits}`;
 }
 
 function showAddressFields() {
@@ -273,36 +264,24 @@ function setSubmitLoading(isLoading) {
 }
 
 async function createFruitfyPixCharge() {
-  if (!FRUITFY_TOKEN || FRUITFY_TOKEN === 'SEU_TOKEN_FRUITFY') {
-    throw new Error('Configure o FRUITFY_TOKEN no checkout antes de gerar PIX.');
-  }
   const shipping = checkoutForm.shipping.value;
   const shippingPrice = shipping === 'sedex' ? SHIPPING_SEDEX : 0;
   const subtotal = currentProduct.price * currentProduct.quantity;
   const total = subtotal + shippingPrice;
   const ticketValue = Math.round(total * 100);
 
-  const response = await fetch(FRUITFY_API_URL, {
+  const response = await fetch(PIX_API_PROXY_URL, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${FRUITFY_TOKEN}`,
-      'Store-Id': FRUITFY_STORE_ID,
       'Content-Type': 'application/json',
       Accept: 'application/json',
-      'Accept-Language': 'pt_BR'
     },
     body: JSON.stringify({
       name: checkoutForm.name.value.trim(),
       email: checkoutForm.email.value.trim(),
-      phone: normalizePhone(checkoutForm.phone.value),
+      phone: checkoutForm.phone.value,
       cpf: checkoutForm.cpf.value.replace(/\D/g, ''),
-      items: [
-        {
-          id: FRUITFY_PRODUCT_ID,
-          value: ticketValue,
-          quantity: 1
-        }
-      ],
+      amount: ticketValue,
       utm: getUtmPayload()
     })
   });
