@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mounjax - Checkout</title>
+  <link rel="stylesheet" href="index.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .hidden { display: none; }
+    .show { display: block; }
+    .animate-spin { animation: spin 1s linear infinite; }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    .star { color: #facc15; }
+  </style>
+</head>
+<body class="min-h-screen bg-white font-sans text-[#201b44]">
+  <!-- Header -->
+  <header class="border-b border-white/10 py-3 sticky top-0 bg-[#1e173f] z-50 shadow-md">
+    <div class="max-w-4xl mx-auto px-4 flex items-center justify-between">
+      <img src="https://i.ibb.co/84jLpqqs/image.png" alt="Logo" class="h-8 w-auto" referrerpolicy="no-referrer">
+      <div class="flex items-center gap-2 text-xs font-semibold text-emerald-400 uppercase tracking-wider">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4.5 8-10V5l-8-3-8 3v7c0 5.5 8 10 8 10z"/></svg>
+        <span>Ambiente Seguro</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-8">
+    <div id="form-step" class="show">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- Left Column: Form -->
+        <div class="lg:col-span-7 space-y-8">
+          <form id="checkout-form" class="space-y-8">
+            <!-- Product Summary Mobile Only -->
+            <div class="lg:hidden bg-[#f8fafc] rounded-2xl p-4 border border-[#e5e7eb] shadow-sm">
+              <div class="flex gap-4">
+                <img id="product-image-mobile" src="../images/kit1-2.webp" alt="Mounjax 1 frasco" class="w-20 h-20 rounded-lg object-contain bg-white p-1 border border-gray-100">
+                <div>
+                  <h3 id="product-name-mobile" class="font-black text-[13px] leading-tight text-[#243248]">Mounjax 1 frasco</h3>
+                  <p id="product-price-mobile" class="text-[#d14d33] text-sm font-bold mt-1">R$ 197,00</p>
+                  <div class="mt-2">
+                    <label class="text-[10px] font-bold uppercase text-[#8ea1bd] tracking-[0.15em]">Quantidade</label>
+                    <div class="inline-flex mt-1 rounded-xl overflow-hidden border border-[#dfe4ec] bg-white">
+                      <button type="button" id="qty-minus-mobile" class="w-9 h-8 text-xl leading-none font-bold text-[#475569] hover:bg-[#f8fafc] transition-colors">-</button>
+                      <span id="qty-value-mobile" class="w-10 h-8 flex items-center justify-center border-x border-[#e5e7eb] bg-[#f7f9fc] text-base leading-none font-black text-[#0f172a]">1</span>
+                      <button type="button" id="qty-plus-mobile" class="w-9 h-8 text-xl leading-none font-bold text-[#475569] hover:bg-[#f8fafc] transition-colors">+</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section: Personal Data -->
+            <section class="space-y-4">
+              <div class="flex items-center gap-2 border-b border-gray-100 pb-2">
+                <div class="bg-[#7462a3] p-1.5 rounded-lg text-white">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 12c2.7 0 5-2.2 5-5s-2.3-5-5-5-5 2.2-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/></svg>
+                </div>
+                <h2 class="font-bold text-lg">Dados Pessoais</h2>
+              </div>
+              <div class="grid grid-cols-1 gap-4">
+                <div class="space-y-1">
+                  <label class="text-xs font-bold uppercase text-gray-500 ml-1">Nome Completo</label>
+                  <input id="name" name="name" placeholder="Ex: João Silva" class="w-full p-3 rounded-xl border border-gray-200 focus:border-[#7462a3] outline-none transition-all">
+                  <span id="error-name" class="text-red-500 text-xs hidden"></span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="space-y-1">
+                    <label class="text-xs font-bold uppercase text-gray-500 ml-1">E-mail</label>
+                    <div class="relative">
+                      <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16v16H4V4zm0 0l8 8 8-8"/></svg>
+                      <input id="email" name="email" placeholder="seu@email.com" class="w-full pl-10 p-3 rounded-xl border border-gray-200 focus:border-[#7462a3] outline-none transition-all">
+                    </div>
+                    <span id="error-email" class="text-red-500 text-xs hidden"></span>
+                  </div>
+                  <div class="space-y-1">
+                    <label class="text-xs font-bold uppercase text-gray-500 ml-1">WhatsApp / Telefone</label>
+                    <div class="relative">
+                      <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92V17a2 2 0 0 1-2 2c-8.28 0-15-6.72-15-15a2 2 0 0 1 2-2h.08a2 2 0 0 1 2 2c0 .28-.06.56-.17.81a2 2 0 0 1-.44.54l-1.1 1.1a16.06 16.06 0 0 0 6.29 6.29l1.1-1.1a2 2 0 0 1 .54-.44c.25-.11.53-.17.81-.17a2 2 0 0 1 2 2z"/></svg>
+                      <input id="phone" name="phone" placeholder="(00) 00000-0000" class="w-full pl-10 p-3 rounded-xl border border-gray-200 focus:border-[#7462a3] outline-none transition-all">
+                    </div>
+                    <span id="error-phone" class="text-red-500 text-xs hidden"></span>
+                  </div>
+                </div>
+                <div class="space-y-1">
+                  <label class="text-xs font-bold uppercase text-gray-500 ml-1">CPF</label>
+                  <input id="cpf" name="cpf" placeholder="000.000.000-00" class="w-full p-3 rounded-xl border border-gray-200 focus:border-[#7462a3] outline-none transition-all">
+                  <span id="error-cpf" class="text-red-500 text-xs hidden"></span>
+                </div>
+              </div>
+            </section>
+
+            <!-- Section: Shipping Address -->
+            <section class="space-y-4">
+              <div class="flex items-center gap-2 border-b border-gray-100 pb-2">
+                <div class="bg-[#7462a3] p-1.5 rounded-lg text-white">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                </div>
+                <h2 class="font-bold text-lg">Endereço de Entrega</h2>
+              </div>
+              <div class="grid grid-cols-1 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="space-y-1">
+                    <label class="text-xs font-bold uppercase text-gray-500 ml-1">CEP</label>
+                    <div class="relative">
+                      <input id="cep" name="cep" placeholder="00000-000" class="w-full p-3 rounded-xl border border-gray-200 focus:border-[#7462a3] outline-none transition-all">
+                      <div id="loading-cep" class="absolute right-3 top-1/2 -translate-y-1/2 hidden animate-spin rounded-full h-4 w-4 border-2 border-[#7462a3] border-t-transparent"></div>
+                    </div>
+                    <span id="error-cep" class="text-red-500 text-xs hidden"></span>
+                  </div>
+                </div>
+                <div id="address-fields" class="hidden space-y-4">
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="md:col-span-2 space-y-1">
+                      <label class="text-xs font-bold uppercase text-gray-500 ml-1">Rua / Logradouro</label>
+                      <input id="street" name="street" class="w-full p-3 rounded-xl border border-gray-200 bg-gray-50 outline-none">
+                    </div>
+                    <div class="space-y-1">
+                      <label class="text-xs font-bold uppercase text-gray-500 ml-1">Número</label>
+                      <input id="number" name="number" placeholder="123" class="w-full p-3 rounded-xl border border-gray-200 focus:border-[#7462a3] outline-none">
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                      <label class="text-xs font-bold uppercase text-gray-500 ml-1">Complemento (Opcional)</label>
+                      <input id="complement" name="complement" placeholder="Apto, Bloco, etc" class="w-full p-3 rounded-xl border border-gray-200 focus:border-[#7462a3] outline-none">
+                    </div>
+                    <div class="space-y-1">
+                      <label class="text-xs font-bold uppercase text-gray-500 ml-1">Bairro</label>
+                      <input id="neighborhood" name="neighborhood" class="w-full p-3 rounded-xl border border-gray-200 bg-gray-50 outline-none">
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="md:col-span-2 space-y-1">
+                      <label class="text-xs font-bold uppercase text-gray-500 ml-1">Cidade</label>
+                      <input id="city" name="city" class="w-full p-3 rounded-xl border border-gray-200 bg-gray-50 outline-none">
+                    </div>
+                    <div class="space-y-1">
+                      <label class="text-xs font-bold uppercase text-gray-500 ml-1">UF</label>
+                      <input id="state" name="state" class="w-full p-3 rounded-xl border border-gray-200 bg-gray-50 outline-none">
+                    </div>
+                  </div>
+                  <!-- Shipping Options -->
+                  <div class="space-y-3 pt-4">
+                    <label class="text-xs font-bold uppercase text-gray-500 ml-1 flex items-center gap-2">
+                      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 8h-3V4H7v4H4v8h16V8z"/></svg> Opções de Frete
+                    </label>
+                    <div class="grid grid-cols-1 gap-3">
+                      <label class="flex items-center justify-between p-4 rounded-xl border-2 cursor-pointer transition-all" id="label-free">
+                        <div class="flex items-center gap-3">
+                          <input type="radio" name="shipping" value="free" checked class="accent-[#7462a3] w-4 h-4">
+                          <div>
+                            <p class="font-bold text-sm">Frete Grátis</p>
+                            <p class="text-xs text-gray-500">7 a 10 dias úteis</p>
+                          </div>
+                        </div>
+                        <span class="font-bold text-emerald-600 uppercase text-xs">Grátis</span>
+                      </label>
+                      <label class="flex items-center justify-between p-4 rounded-xl border-2 cursor-pointer transition-all" id="label-sedex">
+                        <div class="flex items-center gap-3">
+                          <input type="radio" name="shipping" value="sedex" class="accent-[#7462a3] w-4 h-4">
+                          <div>
+                            <p class="font-bold text-sm">Frete SEDEX</p>
+                            <p class="text-xs text-gray-500">2 a 3 dias úteis</p>
+                          </div>
+                        </div>
+                        <span class="font-bold text-sm text-[#201b44]">R$ 21,53</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Section: Payment Method -->
+            <section class="space-y-4">
+              <div class="flex items-center gap-2 border-b border-gray-100 pb-2">
+                <div class="bg-[#7462a3] p-1.5 rounded-lg text-white">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 7v13H3V7l9-5 9 5z"/></svg>
+                </div>
+                <h2 class="font-bold text-lg">Forma de Pagamento</h2>
+              </div>
+              <div class="p-4 rounded-xl border-2 border-[#7462a3] bg-[#7462a3]/5 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="bg-white p-2 rounded-lg shadow-sm">
+                    <img src="https://logopng.com.br/logos/pix-106.png" alt="PIX" class="h-6 w-auto">
+                  </div>
+                  <div>
+                    <p class="font-bold text-sm">Pagar via PIX</p>
+                    <p class="text-xs text-gray-500">Aprovação imediata</p>
+                  </div>
+                </div>
+                <svg class="text-[#7462a3]" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/></svg>
+              </div>
+            </section>
+
+            <button type="submit" class="w-full bg-[#d14d33] hover:bg-[#b8422b] text-white font-bold py-4 rounded-2xl shadow-lg shadow-[#d14d33]/20 flex items-center justify-center gap-2 transition-all group">
+              FINALIZAR COMPRA
+              <svg class="group-hover:translate-x-1 transition-transform" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+
+            <div class="flex items-center justify-center gap-4 text-[10px] text-gray-400 font-bold uppercase tracking-widest pt-4">
+              <div class="flex items-center gap-1">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4.5 8-10V5l-8-3-8 3v7c0 5.5 8 10 8 10z"/></svg>
+                Criptografia SSL
+              </div>
+              <div class="flex items-center gap-1">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4.5 8-10V5l-8-3-8 3v7c0 5.5 8 10 8 10z"/></svg>
+                Compra Garantida
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Right Column: Order Summary (Desktop) -->
+        <div class="lg:col-span-5">
+          <div class="sticky top-24 space-y-6">
+            <div class="bg-[#f8fafc] rounded-3xl p-6 border border-[#e5e7eb] shadow-sm space-y-6">
+              <h3 class="font-black text-xl uppercase italic text-[#111827]">Produto Selecionado</h3>
+              <div class="flex gap-4">
+                <div class="relative">
+                  <img id="product-image-desktop" src="../images/kit1-2.webp" alt="Mounjax 1 frasco" class="w-24 h-24 rounded-xl object-contain bg-white p-1 border border-gray-100 shadow-sm">
+                  <span id="product-badge-quantity" class="absolute -top-2 -right-2 bg-[#7462a3] text-white text-[10px] font-bold w-6 h-6 rounded-full flex items-center justify-center">1</span>
+                </div>
+                <div class="flex-1">
+                  <h4 id="product-name-desktop" class="font-black text-[15px] leading-tight text-[#243248]">Mounjax 1 frasco</h4>
+                  <p class="text-xs text-gray-400 mt-1">Formula original</p>
+                  <p id="product-price-desktop" class="font-bold text-sm mt-2">R$ 197,00</p>
+                  <div class="mt-2">
+                    <label class="text-[10px] font-bold uppercase text-[#8ea1bd] tracking-[0.15em]">Quantidade</label>
+                    <div class="inline-flex mt-1 rounded-xl overflow-hidden border border-[#dfe4ec] bg-white">
+                      <button type="button" id="qty-minus-desktop" class="w-9 h-8 text-xl leading-none font-bold text-[#475569] hover:bg-[#f8fafc] transition-colors">-</button>
+                      <span id="qty-value-desktop" class="w-10 h-8 flex items-center justify-center border-x border-[#e5e7eb] bg-[#f7f9fc] text-base leading-none font-black text-[#0f172a]">1</span>
+                      <button type="button" id="qty-plus-desktop" class="w-9 h-8 text-xl leading-none font-bold text-[#475569] hover:bg-[#f8fafc] transition-colors">+</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="space-y-3 pt-4 border-t border-gray-200">
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-500">Subtotal</span>
+                  <span id="summary-subtotal" class="font-semibold">R$ 197,00</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-500">Frete</span>
+                  <span id="summary-shipping" class="font-semibold text-emerald-600 uppercase text-xs">Grátis</span>
+                </div>
+                <div class="flex justify-between text-lg pt-3 border-t border-gray-200">
+                  <span class="font-bold">Total</span>
+                  <span id="summary-total" class="font-black text-[#201b44]">R$ 197,00</span>
+                </div>
+              </div>
+              <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-100 flex items-center gap-3">
+                <div class="bg-emerald-500 text-white p-1 rounded-full">
+                  <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/></svg>
+                </div>
+                <p id="summary-savings" class="text-[10px] font-bold text-emerald-700 uppercase leading-tight">
+                  Você está economizando R$ 0,00 hoje com esta oferta!
+                </p>
+              </div>
+            </div>
+            <div class="grid grid-cols-3 gap-4 px-2">
+              <div class="flex flex-col items-center text-center gap-2">
+                <div class="bg-gray-50 p-3 rounded-2xl">
+                  <svg class="text-gray-400" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4.5 8-10V5l-8-3-8 3v7c0 5.5 8 10 8 10z"/></svg>
+                </div>
+                <span class="text-[10px] font-bold text-gray-400 uppercase">Seguro</span>
+              </div>
+              <div class="flex flex-col items-center text-center gap-2">
+                <div class="bg-gray-50 p-3 rounded-2xl">
+                  <svg class="text-gray-400" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 8h-3V4H7v4H4v8h16V8z"/></svg>
+                </div>
+                <span class="text-[10px] font-bold text-gray-400 uppercase">Rápido</span>
+              </div>
+              <div class="flex flex-col items-center text-center gap-2">
+                <div class="bg-gray-50 p-3 rounded-2xl">
+                  <svg class="text-gray-400" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 7v13H3V7l9-5 9 5z"/></svg>
+                </div>
+                <span class="text-[10px] font-bold text-gray-400 uppercase">Garantido</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="payment-step" class="hidden">
+      <div class="max-w-xl mx-auto space-y-8">
+        <div class="text-center space-y-2">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full mb-4">
+            <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/></svg>
+          </div>
+          <h2 class="text-2xl font-black">Pedido Quase Finalizado!</h2>
+          <p class="text-gray-500">Realize o pagamento via PIX para confirmar sua compra.</p>
+        </div>
+        <div class="bg-gray-50 rounded-3xl p-8 border border-gray-100 space-y-6 text-center">
+          <div class="space-y-1">
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Valor a pagar</p>
+            <p id="payment-total" class="text-4xl font-black text-[#201b44]">R$ 197,00</p>
+          </div>
+          <div class="bg-white p-6 rounded-2xl shadow-inner border border-gray-100 inline-block mx-auto">
+            <img id="payment-qr-image" src="https://api.qrserver.com/v1/create-qr-code/?data=00020126580014BR.GOV.BCB.PIX0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5913NOME%20RECEBEDOR6008BRASILIA62070503***63041D3D&size=200x200" alt="QR Code PIX" width="200" height="200">
+          </div>
+          <div class="space-y-4">
+            <p class="text-sm font-medium text-gray-600">Escaneie o QR Code acima ou copie o código abaixo:</p>
+            <button id="copy-pix" class="w-full flex items-center justify-between p-4 bg-white rounded-xl border-2 border-dashed border-gray-200 hover:border-[#7462a3] transition-colors group">
+              <span id="pix-code-preview" class="text-xs font-mono truncate mr-4 text-gray-400">00020126580014BR.GOV.BCB.PIX0136123e4567-e89b-12d3...</span>
+              <div class="flex items-center gap-2 text-[#7462a3] font-bold text-sm whitespace-nowrap">
+                <span id="pix-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 12H8m8 0l-4-4m4 4l-4 4"/></svg></span>
+                <span id="pix-text">Copiar Código</span>
+              </div>
+            </button>
+          </div>
+          <div class="pt-4 space-y-3">
+            <div class="flex items-center gap-3 text-left bg-blue-50 p-4 rounded-xl border border-blue-100">
+              <div class="bg-blue-500 text-white p-2 rounded-lg">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 12H8m8 0l-4-4m4 4l-4 4"/></svg>
+              </div>
+              <div>
+                <p class="text-xs font-bold text-blue-900">Como pagar?</p>
+                <p class="text-[10px] text-blue-700">Abra o app do seu banco, escolha "Pagar via PIX" e escaneie o código ou cole a chave.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="max-w-4xl mx-auto px-4 py-12 border-t border-gray-100 space-y-12">
+    <!-- Feedbacks -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 space-y-3">
+        <div class="flex items-center gap-1 star">
+          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+        </div>
+        <p class="text-sm italic text-gray-600">"Finalmente algo que funciona! Perdi 5kg no primeiro mês com o Mounjax sem passar fome. Recomendo muito!"</p>
+        <p class="text-xs font-bold uppercase text-[#1e173f]">— Mariana S., São Paulo</p>
+      </div>
+      <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 space-y-3">
+        <div class="flex items-center gap-1 star">
+          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+        </div>
+        <p class="text-sm italic text-gray-600">"O Mounjax me deu a energia que eu precisava para voltar aos treinos. O resultado na balança foi surpreendente."</p>
+        <p class="text-xs font-bold uppercase text-[#1e173f]">— Ricardo M., Curitiba</p>
+      </div>
+      <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 space-y-3">
+        <div class="flex items-center gap-1 star">
+          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+        </div>
+        <p class="text-sm italic text-gray-600">"Entrega super rápida e o produto é de altíssima qualidade. Sinto meu metabolismo muito mais acelerado."</p>
+        <p class="text-xs font-bold uppercase text-[#1e173f]">— Ana Paula K., Rio de Janeiro</p>
+      </div>
+      <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 space-y-3">
+        <div class="flex items-center gap-1 star">
+          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+        </div>
+        <p class="text-sm italic text-gray-600">"Estava cética no início, mas o Mounjax realmente cumpre o que promete. Melhor investimento na minha saúde."</p>
+        <p class="text-xs font-bold uppercase text-[#1e173f]">— Beatriz L., Belo Horizonte</p>
+      </div>
+    </div>
+    <div class="text-center space-y-6 pt-8 border-t border-gray-100">
+      <p class="text-[10px] text-gray-400 font-medium leading-relaxed">
+        © 2024 Mounjax Official - Todos os direitos reservados.<br>
+        CNPJ: 00.000.000/0001-00 | Rua Exemplo, 123 - São Paulo/SP
+      </p>
+    </div>
+  </footer>
+
+  <script src="checkout.js"></script>
+</body>
+</html>
