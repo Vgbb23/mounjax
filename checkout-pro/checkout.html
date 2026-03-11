@@ -209,9 +209,13 @@
               </div>
             </section>
 
-            <button type="submit" class="w-full bg-[#d14d33] hover:bg-[#b8422b] text-white font-bold py-4 rounded-2xl shadow-lg shadow-[#d14d33]/20 flex items-center justify-center gap-2 transition-all group">
-              FINALIZAR COMPRA
-              <svg class="group-hover:translate-x-1 transition-transform" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <button id="submit-order-btn" type="submit" class="w-full bg-[#d14d33] hover:bg-[#b8422b] disabled:bg-[#d14d33]/70 disabled:cursor-not-allowed text-white font-bold py-4 rounded-2xl shadow-lg shadow-[#d14d33]/20 flex items-center justify-center gap-2 transition-all group">
+              <span id="submit-order-text">FINALIZAR COMPRA</span>
+              <svg id="submit-order-arrow" class="group-hover:translate-x-1 transition-transform" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <span id="submit-order-loading" class="hidden items-center gap-2">
+                <span class="w-4 h-4 border-2 border-white/80 border-t-transparent rounded-full animate-spin"></span>
+                Gerando PIX...
+              </span>
             </button>
 
             <div class="flex items-center justify-center gap-4 text-[10px] text-gray-400 font-bold uppercase tracking-widest pt-4">

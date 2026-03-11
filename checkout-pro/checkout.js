@@ -43,6 +43,10 @@ const productImageMobile = document.getElementById('product-image-mobile');
 const productPriceDesktop = document.getElementById('product-price-desktop');
 const productPriceMobile = document.getElementById('product-price-mobile');
 const productBadgeQuantity = document.getElementById('product-badge-quantity');
+const submitOrderBtn = document.getElementById('submit-order-btn');
+const submitOrderText = document.getElementById('submit-order-text');
+const submitOrderArrow = document.getElementById('submit-order-arrow');
+const submitOrderLoading = document.getElementById('submit-order-loading');
 const paymentQrImage = document.getElementById('payment-qr-image');
 const pixCodePreview = document.getElementById('pix-code-preview');
 const copyPixBtn = document.getElementById('copy-pix');
@@ -84,7 +88,12 @@ function getUtmPayload() {
   const keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
   const utm = {};
   keys.forEach((key) => {
-    const value = params.get(key);
+    const valueFromUrl = params.get(key);
+    const storageKey = `utmify:${key}`;
+    if (valueFromUrl) {
+      sessionStorage.setItem(storageKey, valueFromUrl);
+    }
+    const value = valueFromUrl || sessionStorage.getItem(storageKey);
     if (value) utm[key] = value;
   });
   return utm;
@@ -252,6 +261,17 @@ function changeQuantity(delta) {
   updateSummary();
 }
 
+function setSubmitLoading(isLoading) {
+  if (!submitOrderBtn) return;
+  submitOrderBtn.disabled = isLoading;
+  if (submitOrderText) submitOrderText.classList.toggle('hidden', isLoading);
+  if (submitOrderArrow) submitOrderArrow.classList.toggle('hidden', isLoading);
+  if (submitOrderLoading) {
+    submitOrderLoading.classList.toggle('hidden', !isLoading);
+    submitOrderLoading.classList.toggle('flex', isLoading);
+  }
+}
+
 async function createFruitfyPixCharge() {
   if (!FRUITFY_TOKEN || FRUITFY_TOKEN === 'SEU_TOKEN_FRUITFY') {
     throw new Error('Configure o FRUITFY_TOKEN no checkout antes de gerar PIX.');
@@ -335,6 +355,7 @@ qtyPlusMobile.addEventListener('click', function () { changeQuantity(1); });
 
 checkoutForm.addEventListener('submit', function(e) {
   async function submitWithPix() {
+    setSubmitLoading(true);
     await createFruitfyPixCharge();
     formStep.classList.add('hidden');
     paymentStep.classList.remove('hidden');
@@ -411,6 +432,8 @@ checkoutForm.addEventListener('submit', function(e) {
   submitWithPix().catch((error) => {
     const message = error instanceof Error ? error.message : 'Erro ao gerar PIX. Tente novamente.';
     alert(message);
+  }).finally(() => {
+    setSubmitLoading(false);
   });
 });
 
